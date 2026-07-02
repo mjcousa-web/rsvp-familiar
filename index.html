@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RSVP Eduardo & Sulema</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:"Georgia", serif;
+  min-height:100vh;
+  background:#f8f1e7;
+  color:#3f3528;
+}
+
+.card{
+  width:100%;
+  max-width:430px;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(191,151,89,.45);
+  border-radius:28px;
+  padding:32px 26px;
+  box-shadow:0 18px 45px rgba(80,55,25,.22);
+  backdrop-filter:blur(8px);
+}
+
+.logo{
+  text-align:center;
+  font-size:58px;
+  color:#b98b43;
+  line-height:1;
+  margin-bottom:8px;
+}
+
+.names{
+  text-align:center;
+  letter-spacing:4px;
+  color:#b98b43;
+  font-size:15px;
+  margin-bottom:22px;
+  text-transform:uppercase;
+}
+
+h1{
+  text-align:center;
+  font-size:28px;
+  letter-spacing:5px;
+  font-weight:normal;
+  margin:0 0 28px;
+  text-transform:uppercase;
+}
+
+label{
+  display:block;
+  margin-top:18px;
+  font-size:14px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.ayuda{
+
+margin-top:8px;
+
+margin-bottom:12px;
+
+font-size:14px;
+
+color:#6f675d;
+
+line-height:1.5;
+
+}
+
+input,
+select{
+
+ width:100%;
+    height:58px;
+    padding:0 18px;
+    margin-top:10px;
+    border-radius:16px;
+    border:1.5px solid #c9a76a;
+    background:#ffffff;
+    font-size:18px;
+    color:#3f3528;
+    outline:none;
+    box-sizing:border-box;
+ cursor:pointer;
+
+appearance:none;
+
+background:white;
+}
+
+.options{
+  display:flex;
+  gap:14px;
+  margin-top:12px;
+}
+
+.option-btn{
+  flex:1;
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #b98b43;
+  background:rgba(255,255,255,.7);
+  color:#9a7135;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.option-btn.selected{
+  background:linear-gradient(135deg,#caa45d,#9f742e);
+  color:white;
+}
+
+#personasDiv{
+  display:none;
+}
+
+.submit{
+  width:100%;
+  margin-top:28px;
+  padding:16px;
+  border:none;
+  border-radius:16px;
+  background:linear-gradient(135deg,#caa45d,#9f742e);
+  color:white;
+  font-size:15px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  box-shadow:0 8px 18px rgba(159,116,46,.35);
+}
+
+.submit:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+#mensaje{
+  margin-top:22px;
+  text-align:center;
+  font-size:16px;
+  color:#6f5a35;
+}
+
+.footer{
+  margin-top:26px;
+  text-align:center;
+  font-style:italic;
+  font-size:15px;
+  line-height:1.5;
+  color:#6b5a46;
+}
+
+.hero{
+  min-height:430px;
+  background:
+    linear-gradient(rgba(255,248,238,.25), rgba(255,248,238,.75)),
+    url("iglesia.png");
+  background-size:cover;
+  background-position:center top;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding-top:45px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+
+<div class="card">
+
+  <div class="logo">E<span style="font-size:34px;">&</span>S</div>
+  <div class="names">Eduardo & Sulema</div>
+
+  <h1>Confirmación<br>de Asistencia</h1>
+
+  <label>Nombre y Apellido</label>
+  <input type="text" id="nombre" placeholder="Escribe tu nombre y apellido">
+
+  <label>¿Confirmas tu asistencia?</label>
+
+  <div class="options">
+    <button class="option-btn" id="btnSi" onclick="seleccionarAsistencia('Sí')">✓ Sí</button>
+    <button class="option-btn" id="btnNo" onclick="seleccionarAsistencia('No')">✕ No</button>
+  </div>
+
+  <div id="personasDiv">
+    <label>¿Cuántos lugares deseas confirmar?</label>
+
+<div class="ayuda">
+Cada invitación permite confirmar un máximo de <strong>2 asistentes</strong>
+(incluyéndote a ti).
+</div>
+
+<select id="personas">
+
+<option value="">Selecciona una opción</option>
+
+<option value="1">
+👤 Solo asistiré yo
+</option>
+
+<option value="2">
+👥 Asistiremos dos personas
+</option>
+
+</select>
+  </div>
+
+  <button class="submit" onclick="enviar()">Confirmar asistencia</button>
+
+  <div id="mensaje"></div>
+
+  <div class="footer">
+    Nos sentimos profundamente agradecidos de compartir este momento con ustedes.
+  </div>
+
+</div>
+
+</div> <!-- card -->
+
+</div> <!-- hero -->
+
+<script>
+const URL="https://script.google.com/macros/s/AKfycbykM9FdDJXvL39DIa-fXEfChUIBxZEx49oKav4JFIUPkfFHdjGGIjyyvZW36RCDu-IWIA/exec";
+
+let asistenciaSeleccionada="";
+
+function seleccionarAsistencia(valor){
+  asistenciaSeleccionada=valor;
+
+  document.getElementById("btnSi").classList.remove("selected");
+  document.getElementById("btnNo").classList.remove("selected");
+
+  if(valor==="Sí"){
+    document.getElementById("btnSi").classList.add("selected");
+    document.getElementById("personasDiv").style.display="block";
+  }else{
+    document.getElementById("btnNo").classList.add("selected");
+    document.getElementById("personasDiv").style.display="none";
+    document.getElementById("personas").value="";
+  }
+}
+
+async function enviar(){
+
+  if(localStorage.getItem("rsvp_enviado")){
+    alert("Este dispositivo ya envió una respuesta.");
+    return;
+  }
+
+  const nombre=document.getElementById("nombre").value.trim();
+  const personas=document.getElementById("personas").value;
+
+  if(nombre==="" || asistenciaSeleccionada===""){
+    alert("Por favor completa tu nombre y confirma tu asistencia.");
+    return;
+  }
+
+  if(asistenciaSeleccionada==="Sí" && personas===""){
+    alert("Por favor indica cuántas personas asistirán.");
+    return;
+  }
+
+  const datos={
+    nombre:nombre,
+    asistencia:asistenciaSeleccionada,
+    personas:asistenciaSeleccionada==="Sí" ? personas : "",
+    dispositivo:crypto.randomUUID()
+  };
+
+  await fetch(URL,{
+    method:"POST",
+    body:JSON.stringify(datos)
+  });
+
+  localStorage.setItem("rsvp_enviado","sí");
+
+  document.getElementById("mensaje").innerHTML=
+  "¡Gracias! Tu respuesta ha sido registrada.";
+
+  document.querySelector(".submit").disabled=true;
+}
+</script>
+
+</body>
+</html>
